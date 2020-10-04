@@ -1,0 +1,19 @@
+
+// loan requests
+
+{ "LoanAmount":"10000","CustomerID": "1" ,"LoanID":"1","menu":"12","SaccoID":"1","LoanInterest":"1200","LoanRepaymentTime":"12"}
+
+//loan bal
+{ "LoanAccount":"R1764","CustomerID": "1" ,"menu":"13"} 
+
+//loan repay
+{ "LoanAccount":"R1764","RepaidAmount": "1000" ,"menu":"14"} 
+
+//verify customer
+{ "PhoneNumber":"0708654334","menu":"1"} 
+
+//login
+{ "PhoneNumber":"0708654334","CustomerPin": "456" ,"menu":"2"} 
+
+//change pin
+{ "CustomerID":"1","CustomerPin": "456" ,"NewCustomerPin": "567" ,"menu":"3"} 

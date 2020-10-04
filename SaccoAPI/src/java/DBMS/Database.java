@@ -19,7 +19,8 @@ import javax.sql.DataSource;
  * @author User
  */
 public class Database {
-        private DataSource dataSource;
+
+    private DataSource dataSource;
     private InitialContext initialContext;
 
     private java.sql.Connection conn = null;
@@ -27,22 +28,21 @@ public class Database {
     private ResultSet resultSet = null;
     private Statement statement = null;
     private String _sqlString;
-    
-    public Database(){    
-      try {
+
+    public Database() {
+        try {
             initialContext = new InitialContext();
             dataSource = (DataSource) initialContext.lookup("java:jboss/datasource/MYSACCO");
             conn = dataSource.getConnection();
         } catch (NamingException ex) {
-             System.err.println(Utilities.stringifyStackTrace(ex));
+            System.err.println(Utilities.stringifyStackTrace(ex));
         } catch (SQLException ex) {
-             System.err.println(Utilities.stringifyStackTrace(ex));
+            System.err.println(Utilities.stringifyStackTrace(ex));
         }
-      
-      
+
     }
-    
-      public java.sql.Connection getDatabaseConnection() throws Exception {
+
+    public java.sql.Connection getDatabaseConnection() throws Exception {
         return this.conn;
     }
 
@@ -67,8 +67,8 @@ public class Database {
             initialContext.close();
         }
     }
-    
-     /**
+
+    /**
      * Execute statement
      * <p>
      * This executes an SQL query and returns a resultSet of data after a select
@@ -82,9 +82,9 @@ public class Database {
             statement = conn.createStatement();
             resultSet = statement.executeQuery(_sqlString);
         } catch (SQLException ex) {
-             System.err.println(Utilities.stringifyStackTrace(ex));
+            System.err.println(Utilities.stringifyStackTrace(ex));
         } catch (Exception ex) {
-             System.err.println(Utilities.stringifyStackTrace(ex));
+            System.err.println(Utilities.stringifyStackTrace(ex));
         }
 
         return resultSet;
@@ -98,29 +98,33 @@ public class Database {
      */
     public int execute(String _sqlString) {
         int affectedRows = 0;
-      
+
         try {
             conn = getDatabaseConnection();
             statement = conn.createStatement();
             affectedRows = statement.executeUpdate(_sqlString);
 
         } catch (Exception ex) {
-             System.err.println(Utilities.stringifyStackTrace(ex));
+            System.err.println(Utilities.stringifyStackTrace(ex));
         }
         return affectedRows;
     }
 
-    /**
-     * Sets sql string.
-     * <p>
-     * This will pass the sql query string to prepared statement
-     *
-     * @param _sqlString the sql string
-     */
-    public void set_sqlString(String _sqlString) {
-        this._sqlString = _sqlString;
+    public boolean updateRecords(String sql) {
+        boolean  status= false;
+        try {
+            int affectedRows = execute(sql);
+            if (affectedRows > 0) {
+                status= true;
+            } else {
+                status= false;
+
+            }
+           closeDatabaseConnection();
+
+        } catch (Exception e) {
+        }
+        return status;
     }
-    
-    
-    
+
 }
